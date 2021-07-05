@@ -10,16 +10,6 @@ import (
 	"path/filepath"
 )
 
-func FilePathWalkDir(root string) ([]string, error) {
-	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		if !info.IsDir() {
-			files = append(files, path)
-		}
-		return nil
-	})
-	return files, err
-}
-
 func builderGetObject(builder *gtk.Builder, name string) glib.IObject {
 	obj, err := builder.GetObject(name)
 	assertErr(err)
@@ -49,4 +39,16 @@ func playerReleaseMedia(player *vlc.Player) {
 func getExecutablePath() string {
 	fileName, _ := os.Executable()
 	return path.Dir(fileName)
+}
+
+
+func FilePathWalkDir(root string) ([]string, error) {
+	var f []string
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			f = append(f, path)
+		}
+		return nil
+	})
+	return f, err
 }

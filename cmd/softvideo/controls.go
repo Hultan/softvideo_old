@@ -59,7 +59,6 @@ func onClickJumpButton(nextButton *gtk.Button) {
 	if files == nil {
 		return
 	}
-
 	v := rand.Intn(len(files)) // range is min to max
 	filename := files[v]
 
@@ -120,11 +119,12 @@ func changePath(path string) {
 	playerReleaseMedia(player)
 
 	// filepath.Walk
-	files, err := FilePathWalkDir(path)
+	f, err := FilePathWalkDir(path)
 	if err != nil {
 		panic(err)
 	}
 
+	files  = f
 	lastPath = path
 	pathList.AddPath(path)
 	populateRecentMenu()
