@@ -6,10 +6,11 @@ func populateRecentMenu() {
 	subMenu, _ := gtk.MenuNew()
 
 	for k := range pathList.Paths {
+		path := pathList.Paths[k]
 		item, _ := gtk.MenuItemNewWithLabel(pathList.Paths[k])
 		subMenu.Append(item)
 		item.Connect("activate", func() {
-			changePath(pathList.Paths[k])
+			changePath(path)
 		})
 	}
 	recentMenu.SetSubmenu(subMenu)

@@ -16,8 +16,8 @@ import (
 const appID = "com.github.libvlc-go.gtk3-media-player-example"
 
 var player *vlc.Player
-var playButton *gtk.Button
-var nextButton *gtk.Button
+var playButton *gtk.ToolButton
+//var nextButton *gtk.Button
 var appWin *gtk.ApplicationWindow
 var ok bool
 var files []string
@@ -55,12 +55,12 @@ func main() {
 		appWin.SetTitle(fmt.Sprintf("%s - %s", applicationName, applicationVersion))
 
 		// Get play button.
-		playButton, ok = builderGetObject(builder, "playButton").(*gtk.Button)
+		playButton, ok = builderGetObject(builder, "toolbarPlayButton").(*gtk.ToolButton)
 		assertConv(ok)
 
-		// Get next button.
-		nextButton, ok = builderGetObject(builder, "nextButton").(*gtk.Button)
-		assertConv(ok)
+		//// Get next button.
+		//nextButton, ok = builderGetObject(builder, "nextButton").(*gtk.Button)
+		//assertConv(ok)
 
 		// Get recent menu item.
 		recentMenu, ok = builderGetObject(builder, "recentMenuItem").(*gtk.MenuItem)
@@ -95,6 +95,8 @@ func main() {
 			"onClickRewindButton": onClickRewindButton,
 			"onClickForwardButton": onClickForwardButton,
 			"onClickNextButton": onClickNextButton,
+			"onClickFullscreenButton" : onClickFullscreenButton,
+			"onClickUnfullscreenButton": onClickUnfullscreenButton,
 		}
 		builder.ConnectSignals(signals)
 

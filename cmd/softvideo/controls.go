@@ -38,7 +38,7 @@ func onActivateOpenFile() {
 	}
 }
 
-func onClickPlayButton(playButton *gtk.Button) {
+func onClickPlayButton(playButton *gtk.ToolButton) {
 	if media, _ := player.Media(); media == nil {
 		return
 	}
@@ -52,7 +52,7 @@ func onClickPlayButton(playButton *gtk.Button) {
 	}
 }
 
-func onClickJumpButton(nextButton *gtk.Button) {
+func onClickJumpButton(nextButton *gtk.ToolButton) {
 	// Stop playing the current video
 	onClickStopButton(nil)
 
@@ -73,12 +73,12 @@ func onClickJumpButton(nextButton *gtk.Button) {
 	playButton.SetLabel("gtk-media-pause")
 }
 
-func onClickStopButton(_ *gtk.Button) {
+func onClickStopButton(_ *gtk.ToolButton) {
 	player.Stop()
 	playButton.SetLabel("gtk-media-play")
 }
 
-func onClickPreviousButton(_ *gtk.Button) {
+func onClickPreviousButton(_ *gtk.ToolButton) {
 	pos, _ := player.MediaPosition()
 	newPos := pos - 0.05
 	if newPos <= 0 {
@@ -87,7 +87,7 @@ func onClickPreviousButton(_ *gtk.Button) {
 	player.SetMediaPosition(newPos)
 }
 
-func onClickRewindButton(_ *gtk.Button) {
+func onClickRewindButton(_ *gtk.ToolButton) {
 	pos, _ := player.MediaPosition()
 	newPos := pos - 0.005
 	if newPos <= 0 {
@@ -96,7 +96,7 @@ func onClickRewindButton(_ *gtk.Button) {
 	player.SetMediaPosition(newPos)
 }
 
-func onClickForwardButton(_ *gtk.Button) {
+func onClickForwardButton(_ *gtk.ToolButton) {
 	pos, _ := player.MediaPosition()
 	newPos := pos + 0.005
 	if newPos <= 0 {
@@ -105,7 +105,7 @@ func onClickForwardButton(_ *gtk.Button) {
 	player.SetMediaPosition(newPos)
 }
 
-func onClickNextButton(_ *gtk.Button) {
+func onClickNextButton(_ *gtk.ToolButton) {
 	pos, _ := player.MediaPosition()
 	newPos := pos + 0.05
 	if newPos > 1 {
@@ -141,5 +141,12 @@ func changePath(path string) {
 	player.Play()
 	player.SetMediaPosition(0.2)
 	playButton.SetLabel("gtk-media-pause")
+}
 
+func onClickFullscreenButton() {
+	appWin.Fullscreen()
+}
+
+func onClickUnfullscreenButton() {
+	appWin.Unfullscreen()
 }
