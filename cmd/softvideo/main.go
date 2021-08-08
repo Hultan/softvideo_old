@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"os"
 	"path"
@@ -25,15 +26,14 @@ var recentMenu *gtk.MenuItem
 var lastPath string
 
 func main() {
+	gtk.Init(nil)
+
 	// Initialize libVLC module.
 	err := vlc.Init("--quiet", "--no-xlib")
 	assertErr(err)
 
 	// Set RNG seed
 	rand.Seed(time.Now().UnixNano())
-
-	// Path list
-	pathList = NewPathList()
 
 	// Create a new player.
 	player, err = vlc.NewPlayer()
@@ -51,7 +51,8 @@ func main() {
 		// Get application window.
 		appWin, ok = builderGetObject(builder, "appWindow").(*gtk.ApplicationWindow)
 		assertConv(ok)
-
+		appWin.SetTitle(fmt.Sprintf("%s - %s", applicationName, applicationVersion))
+		
 		// Get play button.
 		playButton, ok = builderGetObject(builder, "playButton").(*gtk.Button)
 		assertConv(ok)
@@ -63,6 +64,11 @@ func main() {
 		// Get recent menu item.
 		recentMenu, ok = builderGetObject(builder, "recentMenuItem").(*gtk.MenuItem)
 		assertConv(ok)
+
+		// Path list
+		pathList = NewPathList()
+		pathList.load()
+		populateRecentMenu()
 
 		// Add builder signal handlers.
 		signals := map[string]interface{}{
@@ -97,6 +103,7 @@ func main() {
 
 	// Cleanup on exit.
 	app.Connect("shutdown", func() {
+		pathList.save()
 		playerReleaseMedia(player)
 		player.Release()
 		vlc.Release()
