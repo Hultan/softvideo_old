@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/hultan/softteam/framework"
 	"math/rand"
 	"os"
-	"path"
 	"time"
 
 	vlc "github.com/adrg/libvlc-go/v3"
@@ -44,15 +44,16 @@ func main() {
 	assertErr(err)
 
 	app.Connect("activate", func() {
+		fw := framework.NewFramework()
 		// Load application layout.
-		builder, err := gtk.BuilderNewFromFile(path.Join(getExecutablePath(),"layout.glade"))
+		builder, err := gtk.BuilderNewFromFile(fw.Resource.GetResourcePath("layout.glade"))
 		assertErr(err)
 
 		// Get application window.
 		appWin, ok = builderGetObject(builder, "appWindow").(*gtk.ApplicationWindow)
 		assertConv(ok)
 		appWin.SetTitle(fmt.Sprintf("%s - %s", applicationName, applicationVersion))
-		
+
 		// Get play button.
 		playButton, ok = builderGetObject(builder, "playButton").(*gtk.Button)
 		assertConv(ok)

@@ -58,8 +58,9 @@ func (p *PathList) load() {
 func LinesInFile(fileName string) []string {
 	f, err := os.Open(fileName)
 	if err != nil {
-		panic(err)
+		return []string{}
 	}
+
 	// Create new Scanner.
 	scanner := bufio.NewScanner(f)
 	result := []string{}
