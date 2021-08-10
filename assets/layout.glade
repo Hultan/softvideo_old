@@ -10,7 +10,7 @@
     <property name="window-position">center</property>
     <property name="default-width">1280</property>
     <property name="default-height">720</property>
-    <property name="icon-name">applications-multimedia</property>
+    <property name="icon-name">video</property>
     <property name="has-resize-grip">True</property>
     <child>
       <object class="GtkBox" id="windowBox">
