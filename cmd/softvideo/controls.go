@@ -4,6 +4,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	"log"
 	"math/rand"
+	"time"
 )
 
 func onActivateOpenFile() {
@@ -69,11 +70,12 @@ func onClickJumpButton(nextButton *gtk.ToolButton) {
 	}
 
 	player.Play()
-	player.SetMediaPosition(0.2)
+	//player.SetMediaPosition(0.2)
 	playButton.SetLabel("gtk-media-pause")
 }
 
 func onClickStopButton(_ *gtk.ToolButton) {
+	ticker.Stop()
 	player.Stop()
 	playButton.SetLabel("gtk-media-play")
 }
@@ -124,7 +126,7 @@ func changePath(path string) {
 		panic(err)
 	}
 
-	files  = f
+	files = f
 	lastPath = path
 	pathList.AddPath(path)
 	populateRecentMenu()
@@ -138,8 +140,23 @@ func changePath(path string) {
 		return
 	}
 
+	ticker = time.NewTicker(2 * time.Second)
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				value, err := player.MediaPosition()
+				if err != nil {
+					return
+				}
+				ignoreTick = true
+				slider.SetValue(float64(value))
+			}
+		}
+	}()
+
 	player.Play()
-	player.SetMediaPosition(0.2)
+	//player.SetMediaPosition(0.2)
 	playButton.SetLabel("gtk-media-pause")
 }
 

@@ -1,4 +1,4 @@
 package main
 
-const applicationVersion = "1.0.4"
+const applicationVersion = "1.0.5"
 const applicationName = "SoftVideo"

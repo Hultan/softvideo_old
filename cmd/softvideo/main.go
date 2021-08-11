@@ -17,6 +17,7 @@ const appID = "com.github.libvlc-go.gtk3-media-player-example"
 
 var player *vlc.Player
 var playButton *gtk.ToolButton
+
 //var nextButton *gtk.Button
 var appWin *gtk.ApplicationWindow
 var ok bool
@@ -24,6 +25,9 @@ var files []string
 var pathList *PathList
 var recentMenu *gtk.MenuItem
 var lastPath string
+var slider *gtk.Scale
+var ticker *time.Ticker
+var ignoreTick bool
 
 func main() {
 	gtk.Init(nil)
@@ -53,6 +57,8 @@ func main() {
 		appWin, ok = builderGetObject(builder, "appWindow").(*gtk.ApplicationWindow)
 		assertConv(ok)
 		appWin.SetTitle(fmt.Sprintf("%s - %s", applicationName, applicationVersion))
+
+		slider = builderGetObject(builder, "slider").(*gtk.Scale)
 
 		// Get play button.
 		playButton, ok = builderGetObject(builder, "toolbarPlayButton").(*gtk.ToolButton)
@@ -88,15 +94,16 @@ func main() {
 			"onActivateQuit": func() {
 				app.Quit()
 			},
-			"onClickPlayButton": onClickPlayButton,
-			"onClickStopButton": onClickStopButton,
-			"onClickJumpButton": onClickJumpButton,
-			"onClickPreviousButton": onClickPreviousButton,
-			"onClickRewindButton": onClickRewindButton,
-			"onClickForwardButton": onClickForwardButton,
-			"onClickNextButton": onClickNextButton,
-			"onClickFullscreenButton" : onClickFullscreenButton,
+			"onClickPlayButton":         onClickPlayButton,
+			"onClickStopButton":         onClickStopButton,
+			"onClickJumpButton":         onClickJumpButton,
+			"onClickPreviousButton":     onClickPreviousButton,
+			"onClickRewindButton":       onClickRewindButton,
+			"onClickForwardButton":      onClickForwardButton,
+			"onClickNextButton":         onClickNextButton,
+			"onClickFullscreenButton":   onClickFullscreenButton,
 			"onClickUnfullscreenButton": onClickUnfullscreenButton,
+			"onSliderValueChanged":      onSliderValueChanged,
 		}
 		builder.ConnectSignals(signals)
 
@@ -114,4 +121,13 @@ func main() {
 
 	// Launch the application.
 	os.Exit(app.Run(os.Args))
+}
+
+func onSliderValueChanged(slider *gtk.Scale) {
+	if ignoreTick {
+		ignoreTick = false
+		return
+	}
+	value := slider.GetValue()
+	player.SetMediaPosition(float32(value))
 }

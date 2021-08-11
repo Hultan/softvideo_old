@@ -2,7 +2,14 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">1</property>
+    <property name="step-increment">0.02</property>
+    <property name="page-increment">0.10</property>
+  </object>
   <object class="GtkApplicationWindow" id="appWindow">
+    <property name="width-request">1024</property>
+    <property name="height-request">768</property>
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="has-focus">True</property>
@@ -18,9 +25,10 @@
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkToolbar">
+          <object class="GtkToolbar" id="toolbar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="toolbar-style">icons</property>
             <child>
               <object class="GtkToolButton" id="toolbarPlayButton">
                 <property name="visible">True</property>
@@ -76,6 +84,66 @@
               </packing>
             </child>
             <child>
+              <object class="GtkToolButton" id="toolbarFullScreenButton">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Fullscreen</property>
+                <property name="use-underline">True</property>
+                <property name="stock-id">gtk-fullscreen</property>
+                <signal name="clicked" handler="onClickFullscreenButton" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="toolbarUnfullscreenButton">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Unfullscreen</property>
+                <property name="use-underline">True</property>
+                <property name="stock-id">gtk-zoom-100</property>
+                <signal name="clicked" handler="onClickUnfullscreenButton" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="is-important">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="toolbarSlider">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="is-important">True</property>
+                <child>
+                  <object class="GtkScale" id="slider">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="adjustment">adjustment1</property>
+                    <property name="round-digits">1</property>
+                    <property name="draw-value">False</property>
+                    <signal name="value-changed" handler="onSliderValueChanged" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkToolButton" id="toolbarFastRewindButton">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -125,45 +193,6 @@
                 <property name="use-underline">True</property>
                 <property name="stock-id">gtk-media-next</property>
                 <signal name="clicked" handler="onClickNextButton" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparatorToolItem">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="is-important">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="toolbarFullScreenButton">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Fullscreen</property>
-                <property name="use-underline">True</property>
-                <property name="stock-id">gtk-fullscreen</property>
-                <signal name="clicked" handler="onClickFullscreenButton" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="toolbarUnfullscreenButton">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Unfullscreen</property>
-                <property name="use-underline">True</property>
-                <property name="stock-id">gtk-zoom-100</property>
-                <signal name="clicked" handler="onClickUnfullscreenButton" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
