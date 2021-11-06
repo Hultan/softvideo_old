@@ -1,6 +1,6 @@
 module github.com/hultan/softvideo
 
-go 1.14
+go 1.17
 
 require (
 	github.com/adrg/libvlc-go/v3 v3.1.4
