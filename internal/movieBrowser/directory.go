@@ -6,34 +6,34 @@ import (
 	"path/filepath"
 )
 
-type Directory struct {
+type directory struct {
 	Name  string
 	Path  string
-	Files []*File
+	Files []*file
 }
 
-func NewDirectory(directoryPath string) *Directory {
-	d := new(Directory)
+func newDirectory(directoryPath string) *directory {
+	d := new(directory)
 	d.Path = directoryPath
 	d.Name = path.Base(directoryPath)
 	return d
 }
 
-func (d *Directory) AddFiles() error {
+func (d *directory) addFiles() error {
 	files, err := d.filePathWalkDir(d.Path)
 	if err != nil {
 		return err
 	}
 
 	for _, v := range files {
-		file := NewFile(v)
+		file := newFile(v)
 		d.Files = append(d.Files, file)
 	}
 
 	return nil
 }
 
-func (d *Directory) filePathWalkDir(root string) ([]string, error) {
+func (d *directory) filePathWalkDir(root string) ([]string, error) {
 	var f []string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {

@@ -2,27 +2,29 @@ package main
 
 import (
 	"fmt"
-	"github.com/hultan/softteam/framework"
 	"math/rand"
 	"os"
 	"time"
 
 	vlc "github.com/adrg/libvlc-go/v3"
 	"github.com/gotk3/gotk3/cairo"
+	"github.com/gotk3/gotk3/gdk"
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 )
 
-const appID = "com.github.libvlc-go.gtk3-media-player-example"
+const appID = "se.softteam.softvideo"
 
 var player *vlc.Player
 var playButton *gtk.ToolButton
+var builder *gtk.Builder
+var playerWindow *gdk.Window
 
-//var nextButton *gtk.Button
+// var nextButton *gtk.Button
 var appWin *gtk.ApplicationWindow
 var ok bool
 var files []string
-var pathList *PathList
+var paths *pathList
 var recentMenu *gtk.MenuItem
 var lastPath string
 var slider *gtk.Scale
@@ -34,24 +36,31 @@ func main() {
 
 	// Initialize libVLC module.
 	err := vlc.Init("--quiet", "--no-xlib")
-	assertErr(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Set RNG seed
 	rand.Seed(time.Now().UnixNano())
 
 	// Create a new player.
 	player, err = vlc.NewPlayer()
-	assertErr(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create new GTK application.
 	app, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
-	assertErr(err)
+	if err != nil {
+		panic(err)
+	}
 
 	app.Connect("activate", func() {
-		fw := framework.NewFramework()
 		// Load application layout.
-		builder, err := gtk.BuilderNewFromFile(fw.Resource.GetResourcePath("layout.glade"))
-		assertErr(err)
+		builder, err = gtk.BuilderNewFromFile("../assets/layout.glade")
+		if err != nil {
+			panic(err)
+		}
 
 		// Get application window.
 		appWin, ok = builderGetObject(builder, "appWindow").(*gtk.ApplicationWindow)
@@ -64,27 +73,32 @@ func main() {
 		playButton, ok = builderGetObject(builder, "toolbarPlayButton").(*gtk.ToolButton)
 		assertConv(ok)
 
-		//// Get next button.
-		//nextButton, ok = builderGetObject(builder, "nextButton").(*gtk.Button)
-		//assertConv(ok)
+		// // Get next button.
+		// nextButton, ok = builderGetObject(builder, "nextButton").(*gtk.Button)
+		// assertConv(ok)
 
 		// Get recent menu item.
 		recentMenu, ok = builderGetObject(builder, "recentMenuItem").(*gtk.MenuItem)
 		assertConv(ok)
 
 		// Path list
-		pathList = NewPathList()
-		pathList.load()
+		paths = newPathList()
+		paths.load()
 		populateRecentMenu()
 
 		// Add builder signal handlers.
 		signals := map[string]interface{}{
 			"onRealizePlayerArea": func(playerArea *gtk.DrawingArea) {
 				// Set window for the player.
-				playerWindow, err := playerArea.GetWindow()
-				assertErr(err)
+				playerWindow, err = playerArea.GetWindow()
+				if err != nil {
+					panic(err)
+				}
+
 				err = setPlayerWindow(player, playerWindow)
-				assertErr(err)
+				if err != nil {
+					panic(err)
+				}
 			},
 			"onDrawPlayerArea": func(playerArea *gtk.DrawingArea, cr *cairo.Context) {
 				cr.SetSourceRGB(0, 0, 0)
@@ -113,7 +127,7 @@ func main() {
 
 	// Cleanup on exit.
 	app.Connect("shutdown", func() {
-		pathList.save()
+		paths.save()
 		playerReleaseMedia(player)
 		player.Release()
 		vlc.Release()

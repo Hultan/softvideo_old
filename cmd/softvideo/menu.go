@@ -5,9 +5,9 @@ import "github.com/gotk3/gotk3/gtk"
 func populateRecentMenu() {
 	subMenu, _ := gtk.MenuNew()
 
-	for k := range pathList.Paths {
-		path := pathList.Paths[k]
-		item, _ := gtk.MenuItemNewWithLabel(pathList.Paths[k])
+	for k := range paths.paths {
+		path := paths.paths[k]
+		item, _ := gtk.MenuItemNewWithLabel(paths.paths[k])
 		subMenu.Append(item)
 		item.Connect("activate", func() {
 			changePath(path)

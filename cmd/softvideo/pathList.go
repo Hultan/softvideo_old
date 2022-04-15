@@ -7,32 +7,32 @@ import (
 	"strings"
 )
 
-type PathList struct {
-	Paths []string
+type pathList struct {
+	paths []string
 }
 
-func NewPathList() *PathList {
-	return new(PathList)
+func newPathList() *pathList {
+	return new(pathList)
 }
 
-func (p *PathList) AddPath(path string) {
+func (p *pathList) addPath(path string) {
 	if p.pathExists(path) {
 		return
 	}
 
-	p.Paths = append(p.Paths, path)
+	p.paths = append(p.paths, path)
 }
 
-func (p *PathList) pathExists(path string) bool {
-	for k := range p.Paths {
-		if p.Paths[k] == path {
+func (p *pathList) pathExists(path string) bool {
+	for k := range p.paths {
+		if p.paths[k] == path {
 			return true
 		}
 	}
 	return false
 }
 
-func (p *PathList) save() {
+func (p *pathList) save() {
 	file, err := os.OpenFile("paths.txt", os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
@@ -41,7 +41,7 @@ func (p *PathList) save() {
 
 	datawriter := bufio.NewWriter(file)
 
-	for _, data := range p.Paths {
+	for _, data := range p.paths {
 		_, _ = datawriter.WriteString(data + "\n")
 	}
 
@@ -49,13 +49,13 @@ func (p *PathList) save() {
 	file.Close()
 }
 
-func (p *PathList) load() {
-	for _, line := range LinesInFile(`paths.txt`) {
-		p.Paths = append(p.Paths, line)
+func (p *pathList) load() {
+	for _, line := range linesInFile(`paths.txt`) {
+		p.paths = append(p.paths, line)
 	}
 }
 
-func LinesInFile(fileName string) []string {
+func linesInFile(fileName string) []string {
 	f, err := os.Open(fileName)
 	if err != nil {
 		return []string{}
@@ -63,7 +63,7 @@ func LinesInFile(fileName string) []string {
 
 	// Create new Scanner.
 	scanner := bufio.NewScanner(f)
-	result := []string{}
+	var result []string
 	// Use Scan.
 	for scanner.Scan() {
 		line := scanner.Text()

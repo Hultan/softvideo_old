@@ -1,26 +1,26 @@
 package movieBrowser
 
-type Directories struct {
-	Directories []*Directory
+type directories struct {
+	Directories []*directory
 }
 
-func NewDirectories() *Directories {
-	return new(Directories)
+func newDirectories() *directories {
+	return new(directories)
 }
 
-func (d *Directories) AddDirectory(path string) error {
+func (d *directories) addDirectory(path string) error {
 	if d.pathExists(path) {
-		return PathDoesNotExistError{dir: path}
+		return pathDoesNotExistError{dir: path}
 	}
 
-	dir := NewDirectory(path)
-	dir.AddFiles()
+	dir := newDirectory(path)
+	dir.addFiles()
 	d.Directories = append(d.Directories, dir)
 
 	return nil
 }
 
-func (d *Directories) pathExists(path string) bool {
+func (d *directories) pathExists(path string) bool {
 	for k := range d.Directories {
 		if d.Directories[k].Path == path {
 			return true

@@ -4,14 +4,14 @@ import (
 	"path"
 )
 
-type File struct {
+type file struct {
 	Name     string
 	Path     string
 	Favorite bool
 }
 
-func NewFile(filePath string) *File {
-	f := new(File)
+func newFile(filePath string) *file {
+	f := new(file)
 	f.Path = filePath
 	f.Name = path.Base(filePath)
 	return f

@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/gotk3/gotk3/gtk"
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/gotk3/gotk3/gtk"
 )
 
 func onActivateOpenFile() {
@@ -14,11 +15,16 @@ func onActivateOpenFile() {
 		gtk.FILE_CHOOSER_ACTION_OPEN,
 		"Cancel", gtk.RESPONSE_DELETE_EVENT,
 		"Open", gtk.RESPONSE_ACCEPT)
-	assertErr(err)
+	if err != nil {
+		panic(err)
+	}
 	defer fileDialog.Destroy()
 
 	fileFilter, err := gtk.FileFilterNew()
-	assertErr(err)
+	if err != nil {
+		panic(err)
+	}
+
 	fileFilter.SetName("Media files")
 	fileFilter.AddPattern("*.avi")
 	fileFilter.AddPattern("*.flv")
@@ -70,7 +76,7 @@ func onClickJumpButton(nextButton *gtk.ToolButton) {
 	}
 
 	player.Play()
-	//player.SetMediaPosition(0.2)
+	// player.SetMediaPosition(0.2)
 	playButton.SetLabel("gtk-media-pause")
 }
 
@@ -121,14 +127,14 @@ func changePath(path string) {
 	playerReleaseMedia(player)
 
 	// filepath.Walk
-	f, err := FilePathWalkDir(path)
+	f, err := filePathWalkDir(path)
 	if err != nil {
 		panic(err)
 	}
 
 	files = f
 	lastPath = path
-	pathList.AddPath(path)
+	paths.addPath(path)
 	populateRecentMenu()
 
 	v := rand.Intn(len(files)) // range is min to max
@@ -156,7 +162,7 @@ func changePath(path string) {
 	}()
 
 	player.Play()
-	//player.SetMediaPosition(0.2)
+	// player.SetMediaPosition(0.2)
 	playButton.SetLabel("gtk-media-pause")
 }
 
